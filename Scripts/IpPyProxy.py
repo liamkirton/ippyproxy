@@ -16,37 +16,23 @@ def command_handler(command):
 	print "command_handler(%s)" % command
 
 # --------------------------------------------------------------------------------
-	
-def tcp_client_recv_filter(buffer):
-	print "tcp_client_recv_filter(%d)" % len(buffer)
+
+def client_recv_filter(buffer):
+	print "client_recv_filter(%d)" % len(buffer)
 	return buffer
 
 # --------------------------------------------------------------------------------
 
-def tcp_server_recv_filter(buffer):
-	print "tcp_server_recv_filter(%d)" % len(buffer)
+def server_recv_filter(buffer):
+	print "server_recv_filter(%d)" % len(buffer)
 	return buffer
 
-# --------------------------------------------------------------------------------
-
-def udp_client_recv_filter(buffer):
-	print "udp_client_recv_filter(%d)" % len(buffer)
-	return buffer
-
-# --------------------------------------------------------------------------------
-
-def udp_server_recv_filter(buffer):
-	print "udp_server_recv_filter(%d)" % len(buffer)
-	return buffer
-	
 # --------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 	ippyproxy.set_command_handler(command_handler)
-	ippyproxy.set_tcp_client_recv_filter(tcp_client_recv_filter)
-	ippyproxy.set_tcp_server_recv_filter(tcp_server_recv_filter)
-	ippyproxy.set_udp_client_recv_filter(udp_client_recv_filter)
-	ippyproxy.set_udp_server_recv_filter(udp_server_recv_filter)
+	ippyproxy.set_client_recv_filter(client_recv_filter)
+	ippyproxy.set_server_recv_filter(server_recv_filter)
 	print '\"IpPyProxy.py\" Loaded.'
 
 # --------------------------------------------------------------------------------

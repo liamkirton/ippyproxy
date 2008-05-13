@@ -37,7 +37,7 @@ TcpServerSocket::~TcpServerSocket()
 
 Socket *TcpServerSocket::OnAccept(SOCKET hSocket)
 {
-	throw new SocketException(this, "Error: TcpServerSocket::OnAccept() Not Supported.");
+	throw SocketException(this, "Error: TcpServerSocket::OnAccept() Not Supported.");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void TcpServerSocket::OnReceive(unsigned char *buffer, unsigned int length, unsi
 		unsigned char *modifiedBuffer = NULL;
 		unsigned int modifiedBufferLength = 0;
 
-		PyInstance::GetInstance()->TcpServerRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
+		PyInstance::GetInstance()->ServerRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
 		if(modifiedBuffer != NULL)
 		{
 			tcpClientSocket_->Send(modifiedBuffer, modifiedBufferLength);

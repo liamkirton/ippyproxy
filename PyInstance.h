@@ -39,41 +39,27 @@ public:
 	
 	void CommandHandler(const unsigned char *command);
 
-	void TcpClientRecv(const unsigned char *buffer,
-					   const unsigned int bufferLength,
-					   unsigned char **modifiedBuffer,
-					   unsigned int *modifiedBufferLength);
+	void ClientRecv(const unsigned char *buffer,
+					const unsigned int bufferLength,
+					unsigned char **modifiedBuffer,
+					unsigned int *modifiedBufferLength);
 
-	void TcpServerRecv(const unsigned char *buffer,
-					   const unsigned int bufferLength,
-					   unsigned char **modifiedBuffer,
-					   unsigned int *modifiedBufferLength);
-
-	void UdpClientRecv(const unsigned char *buffer,
-					   const unsigned int bufferLength,
-					   unsigned char **modifiedBuffer,
-					   unsigned int *modifiedBufferLength);
-
-	void UdpServerRecv(const unsigned char *buffer,
-					   const unsigned int bufferLength,
-					   unsigned char **modifiedBuffer,
-					   unsigned int *modifiedBufferLength);
+	void ServerRecv(const unsigned char *buffer,
+					const unsigned int bufferLength,
+					unsigned char **modifiedBuffer,
+					unsigned int *modifiedBufferLength);
 
 	static PyInstance *GetInstance();
 	static PyObject *PyInstance::SetCommandHandler(PyObject *dummy, PyObject *args);
-	static PyObject *PyInstance::SetTcpClientRecvFilter(PyObject *dummy, PyObject *args);
-	static PyObject *PyInstance::SetTcpServerRecvFilter(PyObject *dummy, PyObject *args);
-	static PyObject *PyInstance::SetUdpClientRecvFilter(PyObject *dummy, PyObject *args);
-	static PyObject *PyInstance::SetUdpServerRecvFilter(PyObject *dummy, PyObject *args);
+	static PyObject *PyInstance::SetClientRecvFilter(PyObject *dummy, PyObject *args);
+	static PyObject *PyInstance::SetServerRecvFilter(PyObject *dummy, PyObject *args);
 
 private:
 	Mutex mutex_;
 	
 	PyObject *pyCommandHandler_;
-	PyObject *pyTcpClientRecvFilter_;
-	PyObject *pyTcpServerRecvFilter_;
-	PyObject *pyUdpClientRecvFilter_;
-	PyObject *pyUdpServerRecvFilter_;
+	PyObject *pyClientRecvFilter_;
+	PyObject *pyServerRecvFilter_;
 };
 
 // ========================================================================================================================

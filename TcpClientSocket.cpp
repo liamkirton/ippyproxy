@@ -61,7 +61,7 @@ Socket *TcpClientSocket::OnAccept(SOCKET hSocket)
 
 void TcpClientSocket::OnConnect()
 {
-	
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ void TcpClientSocket::OnReceive(unsigned char *buffer, unsigned int length, unsi
 		unsigned char *modifiedBuffer = NULL;
 		unsigned int modifiedBufferLength = 0;
 
-		PyInstance::GetInstance()->TcpClientRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
+		PyInstance::GetInstance()->ClientRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
 		if(modifiedBuffer != NULL)
 		{
 			tcpServerSocket_->Send(modifiedBuffer, modifiedBufferLength);

@@ -22,6 +22,8 @@
 
 #include "Mutex.h"
 #include "PyInstance.h"
+#include "SslClientSocket.h"
+#include "SslServerSocket.h"
 #include "TcpClientSocket.h"
 #include "TcpServerSocket.h"
 #include "UdpClientSocket.h"
@@ -29,7 +31,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static const char *c_IpPyProxyVersion = "0.1.2";
+static const char *c_IpPyProxyVersion = "0.2.1";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -95,6 +97,7 @@ int main(int argc, char *argv[])
 	Socket *clientSocket = NULL;
 	Socket *serverSocket = NULL;
 
+	bool sslOperation = false;
 	bool udpOperation = false;
 
 	try
@@ -125,6 +128,10 @@ int main(int argc, char *argv[])
 			{
 				g_PyFilterFile = argv[++i];
 			}
+			else if(cmd == "-s")
+			{
+				sslOperation = true;
+			}
 			else if(cmd == "-u")
 			{
 				udpOperation = true;
@@ -147,7 +154,8 @@ int main(int argc, char *argv[])
 				  << ((g_TargetIp & 0x00FF0000) >> 16) << "."
 				  << ((g_TargetIp & 0x0000FF00) >> 8) << "."
 				  << (g_TargetIp & 0x000000FF) << ":"
-				  << g_TargetPort << std::endl << std::endl;
+				  << g_TargetPort << " " << (sslOperation ? "SSL" : (udpOperation ? "UDP" : "TCP"))
+				  << std::endl << std::endl;
 
 		PyInstance::GetInstance()->Load(g_PyFilterFile);
 
@@ -179,13 +187,13 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		if(!udpOperation)
+		if(sslOperation)
 		{
-			clientSocket = new TcpClientSocket();
+			clientSocket = new SslClientSocket();
 			clientSocket->Bind(g_LocalPort);
 			clientSocket->Listen();
 		}
-		else
+		else if(udpOperation)
 		{
 			clientSocket = new UdpClientSocket();
 			serverSocket = new UdpServerSocket(dynamic_cast<UdpClientSocket *>(clientSocket), g_TargetIp, g_TargetPort);
@@ -196,6 +204,12 @@ int main(int argc, char *argv[])
 
 			serverSocket->Bind(0);
 			serverSocket->Receive();
+		}
+		else
+		{
+			clientSocket = new TcpClientSocket();
+			clientSocket->Bind(g_LocalPort);
+			clientSocket->Listen();
 		}
 
 		g_SocketsMutex.Lock();
@@ -308,6 +322,8 @@ int main(int argc, char *argv[])
 
 	WSACleanup();
 
+	g_PyFilterFile.clear();
+
 #ifdef _DEBUG
 	_CrtDumpMemoryLeaks();
 #endif
@@ -413,6 +429,20 @@ DWORD WINAPI WorkerThreadProc(LPVOID lpParameter)
 			}
 			g_SocketsMutex.Unlock();
 		}
+		catch(const SocketException &e)
+		{
+			EnterCriticalSection(&g_ConsoleCriticalSection);
+			std::cout << std::endl
+					  << "--------------------------------------------------------------------------------" << std::endl
+					  << "WorkerThreadProc[" << GetCurrentThreadId() << "] Caught Fatal Exception: " << e.what() << std::endl
+					  << "GetLastError(): " << GetLastError() << std::endl
+					  << "WSAGetLastError(): " << WSAGetLastError() << std::endl
+					  << "--------------------------------------------------------------------------------" << std::endl
+					  << std::endl;
+			LeaveCriticalSection(&g_ConsoleCriticalSection);
+
+			SetEvent(g_hExitEvent);
+		}
 		catch(const std::exception &e)
 		{
 			EnterCriticalSection(&g_ConsoleCriticalSection);
@@ -450,7 +480,7 @@ void GetRandomBytes(unsigned char *lpBuffer, DWORD dwCount)
 
 void PrintUsage()
 {
-	std::cout << "Usage: IpPyProxy.exe -l <p> -t <a.b.c.d:p> -f <filter.py> -u" << std::endl << std::endl;
+	std::cout << "Usage: IpPyProxy.exe -l <p> -t <a.b.c.d:p> -s -u -f <filter.py>" << std::endl << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

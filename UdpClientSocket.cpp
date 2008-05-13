@@ -46,7 +46,7 @@ UdpClientSocket::~UdpClientSocket()
 
 Socket *UdpClientSocket::OnAccept(SOCKET hSocket)
 {
-	throw new SocketException(this, "Error: UdpClientSocket::OnAccept() Not Supported.");
+	throw SocketException(this, "Error: UdpClientSocket::OnAccept() Not Supported.");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ void UdpClientSocket::OnReceive(unsigned char *buffer, unsigned int length, unsi
 		unsigned char *modifiedBuffer = NULL;
 		unsigned int modifiedBufferLength = 0;
 
-		PyInstance::GetInstance()->UdpClientRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
+		PyInstance::GetInstance()->ClientRecv(buffer, length, &modifiedBuffer, &modifiedBufferLength);
 		if(modifiedBuffer != NULL)
 		{
 			udpServerSocket_->Send(modifiedBuffer, modifiedBufferLength, udpServerSocket_->ip_, udpServerSocket_->port_);

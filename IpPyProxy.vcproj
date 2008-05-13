@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Languages\Python\2.5.1\include"
+				AdditionalIncludeDirectories="D:\Tools\Compilers\Python\2.5.2\include;D:\Tools\Compilers\Python\2.5.2\PC"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="python25.lib mswsock.lib ws2_32.lib"
+				AdditionalDependencies="crypt32.lib mswsock.lib python25.lib secur32.lib ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Languages\Python\2.5.1\libs"
+				AdditionalLibraryDirectories="D:\Tools\Compilers\Python\2.5.2\PCbuild8\Win32Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="C:\Languages\Python\2.5.1\include"
+				AdditionalIncludeDirectories="D:\Tools\Compilers\Python\2.5.2\include;D:\Tools\Compilers\Python\2.5.2\PC"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="python25.lib mswsock.lib ws2_32.lib"
+				AdditionalDependencies="python25.lib mswsock.lib secur32.lib ws2_32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="C:\Languages\Python\2.5.1\libs"
+				AdditionalLibraryDirectories="D:\Tools\Compilers\Python\2.5.2\PCbuild8\Win32Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -193,6 +193,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SslClientSocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SslServerSocket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TcpClientSocket.cpp"
 				>
 			</File>
@@ -236,6 +244,14 @@
 			</File>
 			<File
 				RelativePath=".\Socket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SslClientSocket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SslServerSocket.h"
 				>
 			</File>
 			<File
